@@ -1,0 +1,7 @@
+.current-account-is-chair {
+  display: block;
+}
+
+.current-account-is-not-chair {
+  display: none;
+}
