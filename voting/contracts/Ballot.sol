@@ -25,7 +25,7 @@ contract Ballot {
     mapping(address => Voter) public voters;
 
     // A dynamically-sized array of `Proposal` structs.
-    Proposal[] public proposals;
+    Proposal[] public proposals; 
 
     /// Create a new ballot to choose one of `proposalNames`.
     constructor(bytes32[] memory proposalNames) public {
@@ -135,7 +135,7 @@ contract Ballot {
 
     /// @dev Computes the winning proposal taking all
     /// previous votes into account.
-    function winningProposal() public view
+    function winningProposals() public view
             returns (uint[] memory)
     {
         uint length = 0;
@@ -165,10 +165,10 @@ contract Ballot {
     // Calls winningProposal() function to get the index
     // of the winner contained in the proposals array and then
     // returns the name of the winner
-    function winnerName() external view
+    function winnerNames() external view
             returns (bytes32[] memory)
     {
-        uint[] memory winningProposals = winningProposal();
+        uint[] memory winningProposals = winningProposals();
         bytes32[] memory winnerNames_ = new bytes32[](winningProposals.length);
         
         for (uint256 i = 0; i < winningProposals.length; i++) {

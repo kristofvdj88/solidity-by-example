@@ -30,7 +30,7 @@
           </div>
           <div id="content" style="display: none;">
             <label for="chairperson">Chair:</label>
-            <p id="chairperson"></p> 
+            <input type="text" id="chair" readonly /> 
             <table class="table">
               <thead>
                 <tr>
@@ -43,11 +43,16 @@
               </tbody>
             </table>
             <hr/>
+            <!-- Current Winner -->
+            <div class="row">
+              <h2>Current winner proposal</h2>
+              <p id="current-winner-proposal"></p>
+            </div>
             <!-- Voting Right -->
             <form onSubmit="App.giveRightToVote(); return false;">
               <div class="form-group">
-                <label for="grant-voting-right">Grant voting right</label>
-                <input type="text" class="form-control" id="grant-voting-right" />
+                <label for="grant-voting-right-address">Grant voting right</label>
+                <input type="text" class="form-control" id="grant-voting-right-address" />
                 </select>
               </div>
               <button type="submit" class="btn btn-primary">Grant</button>
@@ -56,8 +61,8 @@
             <!-- Delegation -->
             <form onSubmit="App.delegate(); return false;">
               <div class="form-group">
-                <label for="delegate">Delegate</label>
-                <input type="text" class="form-control" id="delegate" />
+                <label for="delegate-address">Delegate</label>
+                <input type="text" class="form-control" id="delegate-address" />
                 </select>
               </div>
               <button type="submit" class="btn btn-primary">Delegate</button>
@@ -66,8 +71,8 @@
             <!-- Voting -->
             <form onSubmit="App.vote(); return false;">
               <div class="form-group">
-                <label for="proposalsSelect">Select Proposal</label>
-                <select class="form-control" id="proposalsSelect">
+                <label for="proposals-select">Select Proposal</label>
+                <select class="form-control" id="proposals-select">
                 </select>
               </div>
               <button type="submit" class="btn btn-primary">Vote</button>
