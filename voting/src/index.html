@@ -29,59 +29,79 @@
             <p class="text-center">Loading...</p>
           </div>
           <div id="content" style="display: none;">
-            <label for="chairperson">Chair:</label>
-            <input type="text" id="chair" readonly /> 
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Votes</th>
-                </tr>
-              </thead>
-              <tbody id="proposalResults">
-              </tbody>
-            </table>
+            <p id="account-address" class="text-center"></p>
             <hr/>
+            <div class="row">       
+              <h3>Chair</h3>       
+              <label for="chairperson">Chair:</label>
+              <input type="text" id="chair" class="full-width" readonly /> 
+              <hr/>
+            </div>
+            <div class="row">
+              <h3>Proposals</h3>
+              <table class="table" id="proposal-results">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Votes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+              <hr/>
+            </div>            
             <!-- Current Winner -->
             <div class="row">
-              <h2>Current winner proposal</h2>
-              <p id="current-winner-proposal"></p>
+              <h3>Current Winner(s)</h3>
+              <div id="current-winner-proposal"></div>
+              <hr/>
             </div>
             <!-- Voting Right -->
-            <form onSubmit="App.giveRightToVote(); return false;">
-              <div class="form-group">
-                <label for="grant-voting-right-address">Grant voting right</label>
-                <input type="text" class="form-control" id="grant-voting-right-address" />
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Grant</button>
-              <hr />
-            </form>
+            <div class="row">
+              <form class="chair-only" onSubmit="App.giveRightToVote(); return false;">
+                <div class="form-group">
+                  <label for="grant-voting-right-address">Grant voting right</label>
+                  <div id="grant-voting-right-address-container">
+                    <input type="text" class="form-control grant-voting-right-address" />
+                  </div>
+                  <button class="btn btn-secondary" title="Add additional address to grant voting rights to" onclick="App.addGrantVotingRightAddress();">+</button>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Grant</button>
+                <hr />
+              </form>
+            </div>            
             <!-- Delegation -->
-            <form onSubmit="App.delegate(); return false;">
-              <div class="form-group">
-                <label for="delegate-address">Delegate</label>
-                <input type="text" class="form-control" id="delegate-address" />
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Delegate</button>
-              <hr />
-            </form>
+            <div class="row">
+              <h3>Vote Delegation</h3>
+              <form onSubmit="App.delegate(); return false;">
+                <div class="form-group">
+                  <label for="delegate-address">Delegate</label>
+                  <input type="text" class="form-control" id="delegate-address" />
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Delegate</button>
+                <hr />
+              </form>
+            </div>
             <!-- Voting -->
-            <form onSubmit="App.vote(); return false;">
-              <div class="form-group">
-                <label for="proposals-select">Select Proposal</label>
-                <select class="form-control" id="proposals-select">
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Vote</button>
-              <hr />
-            </form>
-            <p id="accountAddress" class="text-center"></p>
+            <div class="row">
+              <h3>Vote</h3>            
+              <form onSubmit="App.vote(); return false;">
+                <div class="form-group">
+                  <label for="proposals-select">Select Proposal</label>
+                  <select class="form-control" id="proposals-select">
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Vote</button>
+                <hr />
+              </form>
+            </div>                        
           </div>
 
-          <div id="error-box" class="alert alert-danger" role="alert"></div>
+          <div id="error-box" class="alert alert-danger" role="alert" style="display: none;"></div>
         </div>
       </div>
     </div>
@@ -92,6 +112,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
+    <script>var exports = {};</script>
+    <script src="js/helpers/logger.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

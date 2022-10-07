@@ -1,5 +1,3 @@
-const { logger } = require(".helpers/logger.js");
-
 App = {
   web3Provider: null,
   contracts: {},
@@ -51,28 +49,41 @@ App = {
    */
   render: async function () {
     try {
-      logger.group("render");
+      Log.group("render");
 
       App.loading();
 
+      // Load account data
+      if (window.ethereum) {
+        const acc = await ethereum.enable();
+        App.account = acc[0];
+        Log.message(App.account);
+        $("#account-address").html("Your Account: " + App.account);
+      }
+
       const instance = await App.contracts.Ballot.deployed();
-      const chair = await instance.chairPerson();
-      const proposals = await instance.proposals();
-      const winningProposals = await instance.winningProposals();
-      const winnerNames = await instance.winnerNames();
 
-      logger.message("chair", chair);
-      logger.message("proposals", proposals);
-      logger.message("winningProposals", winningProposals);
-      logger.message("winnerNames", winnerNames);
-
+      // Chair
+      const chair = await instance.chairperson();
+      Log.message(chair);
+      if (App.account == chair) $(".chair-only").addClass("visible");
+      else $(".chair-only").addClass("invisible");
       $("#chair").val(chair);
 
+      // Proposals
+      var proposals = [];
+      const proposalCount = await instance.getProposalCount();
+      for (let i = 0; i < proposalCount; i++)
+        proposals.push(await instance.proposals(i));
+      Log.table(proposals);
+
+      var proposalResults = $("#proposal-results").find("tbody");
+      proposalResults.empty();
       var proposalsSelect = $("#proposals-select");
-      candidatesResults.empty();
-      for (var i = 0; i <= proposals.length; i++) {
+      proposalsSelect.empty();
+      for (var i = 0; i < proposals.length; i++) {
         var id = i;
-        var name = proposals[i][0];
+        var name = web3.toAscii(proposals[i][0]);
         var voteCount = proposals[i][1];
 
         // Render proposal result
@@ -84,7 +95,7 @@ App = {
           "</td><td>" +
           voteCount +
           "</td></tr>";
-        proposalsResults.append(proposalTemplate);
+        proposalResults.append(proposalTemplate);
 
         // Render proposal ballot option
         var proposalOption =
@@ -92,14 +103,29 @@ App = {
         proposalsSelect.append(proposalOption);
       }
 
-      $("#current-winner-proposal").html(winnerNames);
+      // Winner(s)
+      const winningProposals = await instance.winningProposals();
+      Log.table(winningProposals);
+
+      const winnerNames = await instance.winnerNames();
+      Log.table(winnerNames);
+      $("#current-winner-proposal").empty();
+      for (let i = 0; i < winnerNames.length; i++)
+        $("#current-winner-proposal").append(
+          "<p>" + web3.toAscii(winnerNames[i]) + "</p>"
+        );
+
+      $("#grant-voting-right-address-container").empty();
+      $("#grant-voting-right-address-container").append(
+        '<input type="text" class="form-control grant-voting-right-address" />'
+      );
 
       App.loading(false);
     } catch (e) {
-      logger.error(e);
-      throw e;
+      Log.error(e);
     } finally {
-      logger.groupEnd();
+      Log.groupEnd();
+      App.loading(false);
     }
   },
 
@@ -108,22 +134,22 @@ App = {
    */
   giveRightToVote: async function () {
     try {
-      logger.group("giveRightToVote");
+      Log.group("giveRightToVote");
 
       App.loading();
 
       const instance = await App.contracts.Ballot.deployed();
-      const address = App.getInputValue("grant-voting-right-address");
+      const addresses = App.getInputValues("grant-voting-right-address");
 
-      await instance.giveRightToVote(address, { from: App.account });
+      await instance.giveRightToVote(addresses, { from: App.account });
 
       App.loading(false);
       await App.render();
     } catch (e) {
-      logger.error(e);
-      throw e;
+      Log.error(e);
     } finally {
-      logger.groupEnd();
+      Log.groupEnd();
+      App.loading(false);
     }
   },
 
@@ -132,9 +158,9 @@ App = {
    */
   delegate: async function () {
     try {
-      App.logger.group("delegate");
+      Log.group("delegate");
 
-      loading();
+      App.loading();
 
       const instance = await App.contracts.Ballot.deployed();
       const address = App.getInputValue("delegate-address");
@@ -144,10 +170,10 @@ App = {
       App.loading(false);
       await App.render();
     } catch (e) {
-      logger.error(e);
-      throw e;
+      Log.error(e);
     } finally {
-      logger.groupEnd();
+      Log.groupEnd();
+      App.loading(false);
     }
   },
 
@@ -156,9 +182,9 @@ App = {
    */
   vote: async function () {
     try {
-      App.logger.group("vote");
+      Log.group("vote");
 
-      loading();
+      App.loading();
 
       const instance = await App.contracts.Ballot.deployed();
       const proposalId = App.getInputValue("proposals-select");
@@ -168,11 +194,21 @@ App = {
       App.loading(false);
       await App.render();
     } catch (e) {
-      logger.error(e);
-      throw e;
+      Log.error(e);
     } finally {
-      logger.groupEnd();
+      Log.groupEnd();
+      App.loading(false);
     }
+  },
+
+  /**
+   * Event that gets triggered when the chair user clicks the add button to add
+   * an additional address to grant voting rights to
+   */
+  addGrantVotingRightAddress: function () {
+    $("#grant-voting-right-address-container").append(
+      '<input type="text" class="form-control grant-voting-right-address" />'
+    );
   },
 
   /**
@@ -193,14 +229,28 @@ App = {
   },
 
   /**
-   * Gets an HTML input control value from the DOM
+   * Gets an HTML input control value from the DOM by id
    * @param {*} id of the input control you're targetting
-   * @returns
+   * @returns the string value of the input
    */
   getInputValue: function (id) {
     const value = $(`#${id}`).val();
-    logger.message(id, value);
+    Log.message(value);
     return value;
+  },
+
+  /**
+   * Gets an HTML input control value from the DOM by class
+   * @param {*} className of the input control you're targetting
+   * @returns an array of the string values of the inputs
+   */
+  getInputValues: function (className) {
+    var values = [];
+
+    $(`.${className}`).each(function () {
+      values.push($(this).val());
+    });
+    return values;
   },
 };
 

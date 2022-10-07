@@ -1,7 +1,11 @@
-.current-account-is-chair {
+.visible {
   display: block;
 }
 
-.current-account-is-not-chair {
+.invisible {
   display: none;
+}
+
+.full-width {
+  width: 100%;
 }
