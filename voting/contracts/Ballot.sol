@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.4.22 <=0.8.17;
+
 /// @title Voting with delegation.
 contract Ballot {
     // This declares a new complex type which will

@@ -1,0 +1,21 @@
+{
+  "name": "open-auction",
+  "version": "1.0.0",
+  "description": "A simple open auction dapp",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "truffle test && truffle migrate --reset"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.3.0",
+    "ethers": "^5.7.1",
+    "truffle-assertions": "^0.9.2"
+  }
+}
