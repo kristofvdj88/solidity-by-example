@@ -22,9 +22,7 @@ App = {
       web3 = new Web3(web3.currentProvider);
     } else {
       // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider(
-        "http://localhost:7545"
-      );
+      App.web3Provider = new Web3.providers.HttpProvider("http://localhost:7545");
       web3 = new Web3(App.web3Provider);
     }
     return App.initContract();
@@ -58,7 +56,7 @@ App = {
         const acc = await ethereum.enable();
         App.account = acc[0];
         Log.message(App.account);
-        $("#account-address").html("Your Account: " + App.account);
+        $("#account-address").html("Connected Account: " + App.account);
       }
 
       const instance = await App.contracts.Ballot.deployed();
@@ -73,8 +71,7 @@ App = {
       // Proposals
       var proposals = [];
       const proposalCount = await instance.getProposalCount();
-      for (let i = 0; i < proposalCount; i++)
-        proposals.push(await instance.proposals(i));
+      for (let i = 0; i < proposalCount; i++) proposals.push(await instance.proposals(i));
       Log.table(proposals);
 
       var proposalResults = $("#proposal-results").find("tbody");
@@ -87,19 +84,11 @@ App = {
         var voteCount = proposals[i][1];
 
         // Render proposal result
-        var proposalTemplate =
-          "<tr><th>" +
-          id +
-          "</th><td>" +
-          name +
-          "</td><td>" +
-          voteCount +
-          "</td></tr>";
+        var proposalTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>";
         proposalResults.append(proposalTemplate);
 
         // Render proposal ballot option
-        var proposalOption =
-          "<option value='" + id + "' >" + name + "</ option>";
+        var proposalOption = "<option value='" + id + "' >" + name + "</ option>";
         proposalsSelect.append(proposalOption);
       }
 
@@ -110,15 +99,10 @@ App = {
       const winnerNames = await instance.winnerNames();
       Log.table(winnerNames);
       $("#current-winner-proposal").empty();
-      for (let i = 0; i < winnerNames.length; i++)
-        $("#current-winner-proposal").append(
-          "<p>" + web3.toAscii(winnerNames[i]) + "</p>"
-        );
+      for (let i = 0; i < winnerNames.length; i++) $("#current-winner-proposal").append("<p>" + web3.toAscii(winnerNames[i]) + "</p>");
 
       $("#grant-voting-right-address-container").empty();
-      $("#grant-voting-right-address-container").append(
-        '<input type="text" class="form-control grant-voting-right-address" />'
-      );
+      $("#grant-voting-right-address-container").append('<input type="text" class="form-control grant-voting-right-address" />');
 
       App.loading(false);
     } catch (e) {
@@ -206,9 +190,7 @@ App = {
    * an additional address to grant voting rights to
    */
   addGrantVotingRightAddress: function () {
-    $("#grant-voting-right-address-container").append(
-      '<input type="text" class="form-control grant-voting-right-address" />'
-    );
+    $("#grant-voting-right-address-container").append('<input type="text" class="form-control grant-voting-right-address" />');
   },
 
   /**

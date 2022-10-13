@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Open Auction</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,92 +18,113 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container" style="width: 650px;">
+    <div class="container" style="width: 650px">
       <div class="row">
         <div class="col-lg-12">
           <h1 class="text-center">Open Auction</h1>
-          <hr/>
-          <br/>
+          <hr />
+          <br />
           <div id="loader">
             <p class="text-center">Loading...</p>
           </div>
-          <div id="content" style="display: none;">
+          <div id="content" style="display: none">
             <p id="account-address" class="text-center"></p>
-            <hr/>
-            <div class="row">       
-              <h3>Chair</h3>       
-              <label for="chairperson">Chair:</label>
-              <input type="text" id="chair" class="full-width" readonly /> 
-              <hr/>
-            </div>
+            <hr />
+            <!-- Auction Details -->
             <div class="row">
-              <h3>Proposals</h3>
-              <table class="table" id="proposal-results">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Votes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-              <hr/>
-            </div>            
-            <!-- Current Winner -->
-            <div class="row">
-              <h3>Current Winner(s)</h3>
-              <div id="current-winner-proposal"></div>
-              <hr/>
-            </div>
-            <!-- Voting Right -->
-            <div class="row">
-              <form class="chair-only" onSubmit="App.giveRightToVote(); return false;">
-                <div class="form-group">
-                  <label for="grant-voting-right-address">Grant voting right</label>
-                  <div id="grant-voting-right-address-container">
-                    <input type="text" class="form-control grant-voting-right-address" />
-                  </div>
-                  <button class="btn btn-secondary" title="Add additional address to grant voting rights to" onclick="App.addGrantVotingRightAddress();">+</button>
-                  </select>
+              <h3>Auction Details</h3>
+              <form>
+                <div class="form-group mb-3">
+                  <label for="beneficiary">Beneficiary:</label>
+                  <input type="text" id="beneficiary" class="form-control" readonly />
                 </div>
-                <button type="submit" class="btn btn-primary">Grant</button>
-                <hr />
-              </form>
-            </div>            
-            <!-- Delegation -->
-            <div class="row">
-              <h3>Vote Delegation</h3>
-              <form onSubmit="App.delegate(); return false;">
-                <div class="form-group">
-                  <label for="delegate-address">Delegate</label>
-                  <input type="text" class="form-control" id="delegate-address" />
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Delegate</button>
-                <hr />
-              </form>
-            </div>
-            <!-- Voting -->
-            <div class="row">
-              <h3>Vote</h3>            
-              <form onSubmit="App.vote(); return false;">
-                <div class="form-group">
-                  <label for="proposals-select">Select Proposal</label>
-                  <select class="form-control" id="proposals-select">
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Vote</button>
-                <hr />
-              </form>
-            </div>                        
-          </div>
 
-          <div id="error-box" class="alert alert-danger" role="alert" style="display: none;"></div>
+                <div class="form-group mb-3">
+                  <label id="lbl-highest-bidder" for="highest-bidder">Highest bidder:</label>
+                  <input type="text" id="highest-bidder" class="form-control" readonly />
+                </div>
+
+                <div class="form-group mb-3">
+                  <label id="lbl-highest-bid" for="highest-bid">Highest bid:</label>
+                  <div class="input-group">
+                    <input id="highest-bid" class="form-control" type="number" step="0.000001" readonly />
+                    <div class="input-group-append">
+                      <span class="input-group-text">ETH</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="countdown">Auction ends:</label>
+                  <p id="countdown"></p>
+                </div>
+              </form>
+              <hr />
+            </div>
+            <!-- Bid -->
+            <div class="row">
+              <h3>Bid</h3>
+              <form onSubmit="App.bid(); return false;">
+                <div class="form-group mb-3">
+                  <label for="bid-amount">Bid amount:</label>
+                  <div class="input-group">
+                    <input
+                      id="bid-amount"
+                      class="form-control"
+                      type="number"
+                      min="0.000001"
+                      step="0.000001"
+                      placeholder="0"
+                      aria-label="The amount of ETH you wish to bid"
+                      aria-describedby="basic-addon2"
+                    />
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="basic-addon2">ETH</span>
+                    </div>
+                  </div>
+                </div>
+                <button id="btn-bid" type="submit" class="btn btn-primary">Place bid</button>
+                <hr />
+              </form>
+            </div>
+            <!-- Withdraw -->
+            <div class="row">
+              <h3>Withdraw</h3>
+              <form onSubmit="App.withdraw(); return false;">
+                <button type="submit" class="btn btn-primary">Withdraw</button>
+                <hr />
+              </form>
+            </div>
+            <!-- End Auction -->
+            <div id="end-auction" class="row">
+              <h3>End Auction</h3>
+              <form onSubmit="App.endAuction(); return false;">
+                <button type="submit" id="btn-end-auction" class="btn btn-primary" disabled>End Auction</button>
+                <hr />
+              </form>
+            </div>
+            <!-- Start New Auction -->
+            <div id="start-new-auction" class="row">
+              <h3>Start New Auction</h3>
+              <form onSubmit="App.startNewAuction(); return false;">
+                <div class="form-group mb-3">
+                  <label for="new-end-date">End date:</label>
+                  <input type="datetime-local" id="new-end-date" class="form-control" name="datetime" />
+                </div>
+                <div class="form-group mb-3">
+                  <label for="new-beneficiary">Beneficiary:</label>
+                  <input type="text" id="new-beneficiary" class="form-control" />
+                </div>
+                <button type="submit" id="btn-start-new-auction" class="btn btn-primary" disabled>Start New Auction</button>
+                <hr />
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <div id="error-box" class="alert alert-danger" role="alert" style="display: none"></div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

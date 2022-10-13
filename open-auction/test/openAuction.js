@@ -1,5 +1,4 @@
-// TESTS
-const { expectRevert, expectEvent, BN, time } = require("@openzeppelin/test-helpers");
+const { expectRevert, expectEvent, time } = require("@openzeppelin/test-helpers");
 
 var OpenAuction = artifacts.require("./OpenAuction.sol");
 
@@ -30,7 +29,7 @@ contract("OpenAuction", function (accounts) {
             expectEvent(tx, "HighestBidIncreased", { bidder: alice, amount });
         });
 
-        it("should revert", async function () {
+        it("should revert, bid too low", async function () {
             const amount = web3.utils.toWei("1", "ether");
             await expectRevert.unspecified(auction.bid({ from: bob, value: amount }));
         });

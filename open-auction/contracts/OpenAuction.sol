@@ -2,6 +2,9 @@
 pragma solidity >=0.4.22 <=0.8.17;
 
 contract OpenAuction {
+    // Auction constants
+    uint public MIN_AUCTION_DURATION = 300;
+
     // Parameters of the auction. Times are either
     // absolute unix timestamps (seconds since 1970-01-01)
     // or time periods in seconds.
@@ -22,6 +25,7 @@ contract OpenAuction {
     // Events that will be emitted on changes.
     event HighestBidIncreased(address bidder, uint amount);
     event AuctionEnded(address winner, uint amount);
+    event AuctionStarted(uint auctionEndTime, address beneficiary);
 
     // Errors that describe failures.
 
@@ -30,6 +34,8 @@ contract OpenAuction {
     // is asked to confirm a transaction or
     // when an error is displayed.
 
+    /// The auction duration is not long enough
+    error AuctionDurationNotLongEnough();
     /// The auction has already ended.
     error AuctionAlreadyEnded();
     /// There is already a higher or equal bid.
@@ -46,6 +52,10 @@ contract OpenAuction {
         uint biddingTime,
         address payable beneficiaryAddress
     ) {
+        if (biddingTime < MIN_AUCTION_DURATION) {
+            revert AuctionDurationNotLongEnough();
+        }
+
         beneficiary = beneficiaryAddress;
         auctionEndTime = block.timestamp + biddingTime;
     }
@@ -136,5 +146,27 @@ contract OpenAuction {
 
         // 3. Interaction
         beneficiary.transfer(highestBid);
+    }
+
+    /// Start a new auction with a new end time and beneficiary
+    function auctionStartNew(uint biddingTime,
+        address payable beneficiaryAddress) external {
+
+        // Check wether the auction has fully been closed before we start a new one
+        if (!ended) {
+            revert AuctionNotYetEnded();
+        }
+        if (biddingTime < MIN_AUCTION_DURATION) {
+            revert AuctionDurationNotLongEnough();
+        }
+
+        // Start a new auction
+        beneficiary = beneficiaryAddress;
+        auctionEndTime = block.timestamp + biddingTime;
+        address newAddress;
+        highestBidder = newAddress;
+        highestBid = 0;
+
+        emit AuctionStarted(auctionEndTime, beneficiary);
     }
 }

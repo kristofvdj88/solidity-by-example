@@ -1,118 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Election Results</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Election Results</title>
 
-    <!-- Bootstrap -->
-    <link href="css/custom.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="css/custom.css" rel="stylesheet" />
+        <link href="css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="container" style="width: 650px;">
-      <div class="row">
-        <div class="col-lg-12">
-          <h1 class="text-center">Voting Ballot</h1>
-          <hr/>
-          <br/>
-          <div id="loader">
-            <p class="text-center">Loading...</p>
-          </div>
-          <div id="content" style="display: none;">
-            <p id="account-address" class="text-center"></p>
-            <hr/>
-            <div class="row">       
-              <h3>Chair</h3>       
-              <label for="chairperson">Chair:</label>
-              <input type="text" id="chair" class="full-width" readonly /> 
-              <hr/>
-            </div>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container" style="width: 650px">
             <div class="row">
-              <h3>Proposals</h3>
-              <table class="table" id="proposal-results">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Votes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-              <hr/>
-            </div>            
-            <!-- Current Winner -->
-            <div class="row">
-              <h3>Current Winner(s)</h3>
-              <div id="current-winner-proposal"></div>
-              <hr/>
-            </div>
-            <!-- Voting Right -->
-            <div class="row">
-              <form class="chair-only" onSubmit="App.giveRightToVote(); return false;">
-                <div class="form-group">
-                  <label for="grant-voting-right-address">Grant voting right</label>
-                  <div id="grant-voting-right-address-container">
-                    <input type="text" class="form-control grant-voting-right-address" />
-                  </div>
-                  <button class="btn btn-secondary" title="Add additional address to grant voting rights to" onclick="App.addGrantVotingRightAddress();">+</button>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Grant</button>
-                <hr />
-              </form>
-            </div>            
-            <!-- Delegation -->
-            <div class="row">
-              <h3>Vote Delegation</h3>
-              <form onSubmit="App.delegate(); return false;">
-                <div class="form-group">
-                  <label for="delegate-address">Delegate</label>
-                  <input type="text" class="form-control" id="delegate-address" />
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Delegate</button>
-                <hr />
-              </form>
-            </div>
-            <!-- Voting -->
-            <div class="row">
-              <h3>Vote</h3>            
-              <form onSubmit="App.vote(); return false;">
-                <div class="form-group">
-                  <label for="proposals-select">Select Proposal</label>
-                  <select class="form-control" id="proposals-select">
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Vote</button>
-                <hr />
-              </form>
-            </div>                        
-          </div>
+                <div class="col-lg-12">
+                    <h1 class="text-center">Voting Ballot</h1>
+                    <hr />
+                    <br />
+                    <div id="loader">
+                        <p class="text-center">Loading...</p>
+                    </div>
+                    <div id="content" style="display: none">
+                        <p id="account-address" class="text-center"></p>
+                        <hr />
+                        <div class="row">
+                            <h3>Chair</h3>
+                            <label for="chairperson">Chair:</label>
+                            <input type="text" id="chair" class="full-width" readonly />
+                            <hr />
+                        </div>
+                        <div class="row">
+                            <h3>Proposals</h3>
+                            <table class="table" id="proposal-results">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Votes</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <hr />
+                        </div>
+                        <!-- Current Winner -->
+                        <div class="row">
+                            <h3>Current Winner(s)</h3>
+                            <div id="current-winner-proposal"></div>
+                            <hr />
+                        </div>
+                        <!-- Voting Right -->
+                        <div class="row">
+                            <h3>Voting Right</h3>
+                            <form class="chair-only" onSubmit="App.giveRightToVote(); return false;">
+                                <div class="form-group">
+                                    <label for="grant-voting-right-address">Grant voting right</label>
+                                    <div id="grant-voting-right-address-container">
+                                        <input type="text" class="form-control grant-voting-right-address" />
+                                    </div>
+                                    <button
+                                        class="btn btn-secondary"
+                                        title="Add additional address to grant voting rights to"
+                                        onclick="App.addGrantVotingRightAddress();"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Grant</button>
+                                <hr />
+                            </form>
+                        </div>
+                        <!-- Delegation -->
+                        <div class="row">
+                            <h3>Vote Delegation</h3>
+                            <form onSubmit="App.delegate(); return false;">
+                                <div class="form-group">
+                                    <label for="delegate-address">Delegate</label>
+                                    <input type="text" class="form-control" id="delegate-address" />
+                                </div>
+                                <button type="submit" class="btn btn-primary">Delegate</button>
+                                <hr />
+                            </form>
+                        </div>
+                        <!-- Voting -->
+                        <div class="row">
+                            <h3>Vote</h3>
+                            <form onSubmit="App.vote(); return false;">
+                                <div class="form-group">
+                                    <label for="proposals-select">Select Proposal</label>
+                                    <select class="form-control" id="proposals-select"></select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Vote</button>
+                                <hr />
+                            </form>
+                        </div>
+                    </div>
 
-          <div id="error-box" class="alert alert-danger" role="alert" style="display: none;"></div>
+                    <div id="error-box" class="alert alert-danger" role="alert" style="display: none"></div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/web3.min.js"></script>
-    <script src="js/truffle-contract.js"></script>
-    <script src="js/helpers/logger.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/web3.min.js"></script>
+        <script src="js/truffle-contract.js"></script>
+        <script src="js/helpers/logger.js"></script>
+        <script src="js/app.js"></script>
+    </body>
 </html>
