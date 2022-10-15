@@ -4,3 +4,4 @@
 
 1. [Voting Ballot](https://github.com/kristofvdj88/solidity-by-example/tree/main/voting)
 2. [Open Auction](https://github.com/kristofvdj88/solidity-by-example/tree/main/open-auction)
+3. [Blind Auction](https://github.com/kristofvdj88/solidity-by-example/tree/main/blind-auction)
